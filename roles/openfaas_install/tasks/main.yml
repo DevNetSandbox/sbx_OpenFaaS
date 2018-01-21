@@ -1,0 +1,23 @@
+- name: Install Istio
+  command: "{{ item }}"
+  args:
+    chdir: "/root/faas-netes"
+  with_items:
+    - kubectl apply -f ./namespaces.yml
+    - kubectl apply -f ./yaml
+  register: install_faas_netes
+  ignore_errors: True
+- debug:
+    var: install_faas_netes.stdout_lines
+
+
+- name: Install openFaaS samples
+  command: "{{ item }}"
+  args:
+    chdir: "/root/faas-cli"
+  with_items:
+    - faas-cli deploy -f samples.yml
+  register: install_openfaas_samples
+  ignore_errors: True
+- debug:
+    var: install_openfaas_samples.stdout_lines
