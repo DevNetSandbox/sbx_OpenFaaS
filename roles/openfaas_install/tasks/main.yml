@@ -1,4 +1,4 @@
-- name: Install Istio
+- name: Install OpenFaaS
   command: "{{ item }}"
   args:
     chdir: "/root/faas-netes"
@@ -9,6 +9,9 @@
   ignore_errors: True
 - debug:
     var: install_faas_netes.stdout_lines
+- wait_for:
+   port: 31112
+   delay: 10
 
 
 - name: Install openFaaS samples
@@ -16,7 +19,7 @@
   args:
     chdir: "/root/faas-cli"
   with_items:
-    - faas-cli deploy -f samples.yml
+    - faas-cli deploy -f stack.yml
   register: install_openfaas_samples
   ignore_errors: True
 - debug:
